@@ -6,17 +6,16 @@ An attempt to create a Duotone / Duoshade effect similar to the old comic book p
 
 - `Frequency` represents the approximate width of the diagonal lines in screen pixels
 - `Level` adjust the thickness of the duoshade lines in the range from 0 to 1 as a fraction of the `Frequency`
-- `Width` is the width of the outline in pixels
-- `Tones` represents the luma levels at which the effects start:
-  - 0 - X black
-  - X - Y two diagonal stripes
-  - Y - Z one diagonal stripes
-  - Z - 1 white
-  - W - the difference in colour required for a line to inferred
+- `Edge` the thickness of the blended edge of the duoshade line as above
+- `Black` represents the black level
+- `Low` one diagonal stripe
+- `High` two diagonal stripes
 
 ## Example Scene
 
 This component contains the shader, a material, and a script to apply it to the camera. To add this effect to your scene, assign the ScreenEffect script to your camera and choose the DuoShader material as the `screenEffect`.
+
+I have added the Toon shader components from the Unity Essentials pack to provide the outline and quantised colour.
 
 ## Customisation
 

@@ -3,10 +3,12 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Frequency ("Frequency", Range(3, 10)) = 5
-        _Level ("Level", Range(0,1)) = 0.1
-        _Width ("Width", Range(0,5)) = 5
-        _Tones ("Tones", Vector) = (0.0, 0.25, 0.5, 0.75)
+        _Frequency ("Frequency", Range(3, 10)) = 7
+        _Level ("Level", Range(0, 1)) = 0.15
+        _Edge ("Edge", Range(0, 1)) = 0.1
+        _Black ("Black", Range(0, 1)) = 0.2
+        _Low ("Low", Range(0, 1)) = 0.4
+        _High ("High", Range(0, 1)) = 0.6
     }
     SubShader
     {
@@ -44,8 +46,10 @@
             sampler2D _MainTex;
             float _Frequency;
             float _Level;
-            float _Width;
-            float4 _Tones;
+            float _Edge;
+            float _Black;
+            float _Low;
+            float _High;
 
             float shade(float l, float2 uv)
             {
@@ -55,15 +59,17 @@
                 float d1 = 1.0 - abs(0.5 - fmod(l1, f) / f);
                 float d2 = 1.0 - abs(0.5 - fmod(l2, f) / f);
 
-                float c = step(_Tones.z, l);
-                float c1 = 1.0 - smoothstep(_Tones.y, _Tones.z, l);
-                float c2 = 1.0 - smoothstep(_Tones.x, _Tones.y, l);
-                float c3 = step(_Tones.x, l);
+                float c = step(_High, l);
+                float c1 = 1.0 - smoothstep(_Low, _High, l);
+                float c2 = 1.0 - smoothstep(_Black, _Low, l);
+                float c3 = step(_Black, l);
 
-                float s1 = smoothstep(1.0 - _Level, 1.0, d1) * c1;
-                float s2 = smoothstep(1.0 - _Level, 1.0, d2) * c2;
+                float s1 = smoothstep(1.0 - (_Level + _Edge), 1.0 - _Level, d1) * c1;
+                float s2 = smoothstep(1.0 - (_Level + _Edge), 1.0 - _Level, d2) * c2;
 
-                return saturate(c + (1.0 - (s1 + s2)) * c3);
+                float hatch = min(1.0 - s1, 1.0 - s2);
+
+                return saturate(c + hatch * c3);
             }
 
             float luma(float3 col)
@@ -77,17 +83,8 @@
                 float2 uv = i.uv.xy;
                 fixed4 col = tex2D(_MainTex, uv);
                 float3 rgb = col.rgb;
-                float du = (_ScreenParams.z - 1.0f) * _Width;
-                float dv = (_ScreenParams.w - 1.0f) * _Width;
-                float dcol = 0;
-                dcol = max(dcol, length(rgb - tex2D(_MainTex, uv + float2(du, 0.0)).rgb));
-                dcol = max(dcol, length(rgb - tex2D(_MainTex, uv + float2(-du, 0.0)).rgb));
-                dcol = max(dcol, length(rgb - tex2D(_MainTex, uv + float2(0.0, dv)).rgb));
-                dcol = max(dcol, length(rgb - tex2D(_MainTex, uv + float2(0.0, -dv)).rgb));
-
                 float s = shade(luma(rgb), uv);
-                float l = smoothstep(1.0 - 2.0 * _Tones.w, 1.0 - _Tones.w, 1.0 - dcol);
-                col.rgb = s * l;
+                col.rgb = s;
                 return col;
             }
             ENDCG
