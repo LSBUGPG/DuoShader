@@ -3,12 +3,13 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Frequency ("Frequency", Range(3, 10)) = 7
+        _Frequency ("Frequency", Range(3, 20)) = 7
         _Level ("Level", Range(0, 1)) = 0.15
         _Edge ("Edge", Range(0, 1)) = 0.1
         _Black ("Black", Range(0, 1)) = 0.2
         _Low ("Low", Range(0, 1)) = 0.4
-        _High ("High", Range(0, 1)) = 0.6
+        _Mid("Mid", Range(0, 1)) = 0.6
+        _High ("High", Range(0, 1)) = 0.8
     }
     SubShader
     {
@@ -49,27 +50,37 @@
             float _Edge;
             float _Black;
             float _Low;
+            float _Mid;
             float _High;
+
+            float slice(float low, float high, float value)
+            {
+                return 1.0 - (1.0 - step(low, value)) - step(high, value);
+            }
 
             float shade(float l, float2 uv)
             {
                 float f = _Frequency;
-                float l1 = uv.x * _ScreenParams.x + uv.y * _ScreenParams.y;
-                float l2 = uv.x * _ScreenParams.x + (1.0 - uv.y) * _ScreenParams.y;
-                float d1 = 1.0 - abs(0.5 - fmod(l1, f) / f);
-                float d2 = 1.0 - abs(0.5 - fmod(l2, f) / f);
+                float width = _ScreenParams.x / f;
+                float height = _ScreenParams.y / f;
+                float l1 = uv.x * width + uv.y * height;
+                float l2 = uv.x * width + (1.0 - uv.y) * height;
+                float d1 = (abs(0.5 - frac(l1)) * 2.0);
+                float d2 = (abs(0.5 - frac(l2)) * 2.0);
 
-                float c = step(_High, l);
-                float c1 = 1.0 - smoothstep(_Low, _High, l);
-                float c2 = 1.0 - smoothstep(_Black, _Low, l);
-                float c3 = step(_Black, l);
+                float white = step(_High, l);
+                float black = 1.0 - step(_Black, l);
+                float low = ((1.0 - smoothstep(_Black, _Low, l)) * 0.5 + 0.5) * slice(_Black, _Low, l);
+                float mid = ((1.0 - smoothstep(_Low, _Mid, l)) * 0.5 + 0.5) * slice(_Low, _Mid, l);
+                float high = ((1.0 - smoothstep(_Mid, _High, l)) * 0.5) * slice(_Mid, _High, l);
 
-                float s1 = smoothstep(1.0 - (_Level + _Edge), 1.0 - _Level, d1) * c1;
-                float s2 = smoothstep(1.0 - (_Level + _Edge), 1.0 - _Level, d2) * c2;
+                float s1 = smoothstep(1.0 - _Level - _Edge, 1.0 - _Level, d2);
+                float s2 = smoothstep(1.0 - _Level - _Edge, 1.0 - _Level, d1);
+                
+                float3 tones = float3(high, mid, low);
+                float hatch = 1.0 - dot(float3(s1, s2, (s1 + s2)), tones);
 
-                float hatch = min(1.0 - s1, 1.0 - s2);
-
-                return saturate(c + hatch * c3);
+                return saturate(white + hatch * (1.0 - black));
             }
 
             float luma(float3 col)

@@ -8,8 +8,9 @@ An attempt to create a Duotone / Duoshade effect similar to the old comic book p
 - `Level` adjust the thickness of the duoshade lines in the range from 0 to 1 as a fraction of the `Frequency`
 - `Edge` the thickness of the blended edge of the duoshade line as above
 - `Black` represents the black level
-- `Low` one diagonal stripe
-- `High` two diagonal stripes
+- `High` one diagonal stripe
+- `Mid` other diagonal stripe - but darker
+- `Low` both darker diagonal stripes
 
 ## Example Scene
 
