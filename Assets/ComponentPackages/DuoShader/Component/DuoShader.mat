@@ -56,33 +56,42 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Black: 0.15
+    - _Black: 0.25
     - _BumpScale: 1
     - _Cutoff: 0.5
+    - _Dark: 0.4
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _Edge: 0.25
     - _Frequency: 7
+    - _Fringe: 0.35
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _High: 0.8
+    - _High: 1
     - _Level: 0.25
-    - _Low: 0.41
+    - _Light: 0.8
+    - _Low: 0.392
     - _Metallic: 0
     - _Mid: 0.6
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PrintBlackLevel: 0.735
+    - _PrintWhiteLevel: 0.768
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Stripe: 1
+    - _Thickness: 0.25
     - _UVSec: 0
+    - _UndevelopedLevel: 0.01
     - _Width: 2.29
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DevelopedColour: {r: 0.25882354, g: 0.28235295, b: 0.28235295, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Tones: {r: 0.1, g: 0.46, b: 0.87, a: 0.82}
+    - _UndevelopedColour: {r: 0.83921576, g: 0.91372555, b: 0.9607844, a: 1}
     - _Weights: {r: 1, g: 1, b: 0, a: 0}

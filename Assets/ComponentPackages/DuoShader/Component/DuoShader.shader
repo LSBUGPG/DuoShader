@@ -3,13 +3,17 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _DevelopedColour ("Developed Colour", Color) = (0, 0, 0)
+        _UndevelopedColour ("Undeveloped Colour", Color) = (1, 1, 1)
+        _UndevelopedLevel ("Undeveloped Level", Range(0, 1)) = 0.05
         _Frequency ("Frequency", Range(3, 20)) = 7
-        _Level ("Level", Range(0, 1)) = 0.15
-        _Edge ("Edge", Range(0, 1)) = 0.1
+        _Thickness ("Thickness", Range(0, 1)) = 0.15
+        _Fringe ("Fringe", Range(0, 1)) = 0.1
         _Black ("Black", Range(0, 1)) = 0.2
-        _Low ("Low", Range(0, 1)) = 0.4
-        _Mid("Mid", Range(0, 1)) = 0.6
-        _High ("High", Range(0, 1)) = 0.8
+        _Dark ("Dark Tone", Range(0, 1)) = 0.4
+        _Light ("Light Tone", Range(0, 1)) = 0.8
+        _PrintBlackLevel ("Print Black Level", Range(0, 1)) = 0.7
+        _PrintWhiteLevel ("Print White Level", Range(0, 1)) = 0.8
     }
     SubShader
     {
@@ -45,13 +49,17 @@
             }
 
             sampler2D _MainTex;
+            float3 _DevelopedColour;
+            float3 _UndevelopedColour;
+            float _UndevelopedLevel;
             float _Frequency;
-            float _Level;
-            float _Edge;
+            float _Thickness;
+            float _Fringe;
             float _Black;
-            float _Low;
-            float _Mid;
-            float _High;
+            float _Dark;
+            float _Light;
+            float _PrintBlackLevel;
+            float _PrintWhiteLevel;
 
             float slice(float low, float high, float value)
             {
@@ -60,27 +68,25 @@
 
             float shade(float l, float2 uv)
             {
-                float f = _Frequency;
-                float width = _ScreenParams.x / f;
-                float height = _ScreenParams.y / f;
+                float f1 = _Frequency;
+                float width = _ScreenParams.x / f1;
+                float height = _ScreenParams.y / f1;
                 float l1 = uv.x * width + uv.y * height;
+                float f2 = _Frequency * 1.2;
+                width = _ScreenParams.x / f2;
+                height = _ScreenParams.y / f2;
                 float l2 = uv.x * width + (1.0 - uv.y) * height;
                 float d1 = (abs(0.5 - frac(l1)) * 2.0);
                 float d2 = (abs(0.5 - frac(l2)) * 2.0);
 
-                float white = step(_High, l);
-                float black = 1.0 - step(_Black, l);
-                float low = ((1.0 - smoothstep(_Black, _Low, l)) * 0.5 + 0.5) * slice(_Black, _Low, l);
-                float mid = ((1.0 - smoothstep(_Low, _Mid, l)) * 0.5 + 0.5) * slice(_Low, _Mid, l);
-                float high = ((1.0 - smoothstep(_Mid, _High, l)) * 0.5) * slice(_Mid, _High, l);
+                float dark = (1.0 - smoothstep(_Black, _Dark, l)) * slice(_Black, _Dark, l);
+                float light = (1.0 - smoothstep(_Dark, _Light, l)) * slice(_Black, _Light, l);
 
-                float s1 = smoothstep(1.0 - _Level - _Edge, 1.0 - _Level, d2);
-                float s2 = smoothstep(1.0 - _Level - _Edge, 1.0 - _Level, d1);
+                float s1 = smoothstep(1.0 - _Thickness - _Fringe, 1.0 - _Thickness, d1);
+                float s2 = smoothstep(1.0 - _Thickness - _Fringe, 1.0 - _Thickness, d2);
                 
-                float3 tones = float3(high, mid, low);
-                float hatch = 1.0 - dot(float3(s1, s2, (s1 + s2)), tones);
-
-                return saturate(white + hatch * (1.0 - black));
+                float hatch = saturate(s1 * (light + _UndevelopedLevel) + s2 * (dark + _UndevelopedLevel));
+                return hatch;
             }
 
             float luma(float3 col)
@@ -94,9 +100,12 @@
                 float2 uv = i.uv.xy;
                 fixed4 col = tex2D(_MainTex, uv);
                 float3 rgb = col.rgb;
-                float s = shade(luma(rgb), uv);
-                col.rgb = s;
-                return col;
+                float l = luma(rgb);
+                float3 s = shade(l, uv);
+                col.rgb = lerp(float3(1, 1, 1), lerp(_UndevelopedColour, _DevelopedColour, s), step(_UndevelopedLevel, s));
+                float black = 1.0 - step(_Black, l);
+                col.rgb *= (1.0 - black);
+                return smoothstep(_PrintBlackLevel, _PrintWhiteLevel, luma(col.rgb));
             }
             ENDCG
         }
