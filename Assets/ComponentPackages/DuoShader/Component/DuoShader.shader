@@ -72,6 +72,8 @@
 
             float noise(float2 uv)
             {
+                // variation on the noise function used by Unity PostProcessing
+                // grain effect
                 return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453);
             }
 
