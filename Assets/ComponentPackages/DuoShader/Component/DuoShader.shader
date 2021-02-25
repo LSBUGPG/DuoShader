@@ -5,6 +5,8 @@
         _MainTex ("Texture", 2D) = "white" {}
         _DevelopedColour ("Developed Colour", Color) = (0, 0, 0)
         _UndevelopedColour ("Undeveloped Colour", Color) = (1, 1, 1)
+        _InkColour ("Ink Colour", Color) = (0, 0, 0)
+        _PaperColour ("Paper Colour", Color) = (1, 1, 1)
         _UndevelopedLevel ("Undeveloped Level", Range(0, 1)) = 0.05
         _Frequency ("Frequency", Range(3, 20)) = 7
         _Thickness ("Thickness", Range(0, 1)) = 0.15
@@ -13,7 +15,7 @@
         _Dark ("Dark Tone", Range(0, 1)) = 0.4
         _Light ("Light Tone", Range(0, 1)) = 0.8
         _PrintBlackLevel ("Print Black Level", Range(0, 1)) = 0.7
-        _PrintWhiteLevel ("Print White Level", Range(0, 1)) = 0.8
+        _Noise ("Noise", Range(0, 1)) = 0.01
     }
     SubShader
     {
@@ -51,6 +53,8 @@
             sampler2D _MainTex;
             float3 _DevelopedColour;
             float3 _UndevelopedColour;
+            float3 _InkColour;
+            float3 _PaperColour;
             float _UndevelopedLevel;
             float _Frequency;
             float _Thickness;
@@ -59,11 +63,16 @@
             float _Dark;
             float _Light;
             float _PrintBlackLevel;
-            float _PrintWhiteLevel;
+            float _Noise;
 
             float slice(float low, float high, float value)
             {
                 return 1.0 - (1.0 - step(low, value)) - step(high, value);
+            }
+
+            float noise(float2 uv)
+            {
+                return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453);
             }
 
             float shade(float l, float2 uv)
@@ -72,7 +81,7 @@
                 float width = _ScreenParams.x / f1;
                 float height = _ScreenParams.y / f1;
                 float l1 = uv.x * width + uv.y * height;
-                float f2 = _Frequency * 1.2;
+                float f2 = _Frequency;
                 width = _ScreenParams.x / f2;
                 height = _ScreenParams.y / f2;
                 float l2 = uv.x * width + (1.0 - uv.y) * height;
@@ -100,12 +109,13 @@
                 float2 uv = i.uv.xy;
                 fixed4 col = tex2D(_MainTex, uv);
                 float3 rgb = col.rgb;
-                float l = luma(rgb);
+                float l = luma(rgb) + noise(uv) * _Noise;
                 float3 s = shade(l, uv);
-                col.rgb = lerp(float3(1, 1, 1), lerp(_UndevelopedColour, _DevelopedColour, s), step(_UndevelopedLevel, s));
+                rgb = lerp(float3(1, 1, 1), lerp(_UndevelopedColour, _DevelopedColour, s), step(_UndevelopedLevel, s));
                 float black = 1.0 - step(_Black, l);
-                col.rgb *= (1.0 - black);
-                return smoothstep(_PrintBlackLevel, _PrintWhiteLevel, luma(col.rgb));
+                rgb *= (1.0 - black);
+                col.rgb = lerp(_InkColour, _PaperColour, step(_PrintBlackLevel, luma(rgb) + noise(uv) * _Noise));
+                return col;
             }
             ENDCG
         }
