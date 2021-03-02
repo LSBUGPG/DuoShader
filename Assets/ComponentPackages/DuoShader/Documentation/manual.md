@@ -1,6 +1,6 @@
 # DuoShader
 
-An attempt to create a Duotone / Duoshade effect similar to the old black and white comic book printing technique made famous by Teenage Mutant Ninja Turtles, 1984.
+An attempt to recreate a Duotone / Duoshade effect similar to the old black and white comic book printing technique made famous in Teenage Mutant Ninja Turtles, 1984.
 
 ![Teenage Mutant Ninja Turtles #1, 1984](./turtles.png)
 
@@ -10,34 +10,43 @@ At first glance it looks like this is printing with 4 shades: black, dark, light
 
 This effect was achieved by the artist before printing by using a special type of paper with pre-printed diagonal lines. The lines appear in a very light blue ink which does not get picked up in the printing process. There are also two chemical paints, one which darkens one set of the diagonal lines, and another which darkens both.
 
-Here is [a video of the process in action](https://youtu.be/GftgBL-sHnI?t=110).
+Here is [a video of the process in action](https://youtu.be/GftgBL-sHnI).
 
 ## How to use this shader
 
-This is a full-screen effect shader, so it needs to be applied to your camera render with a script.
+This package contains two PostProcess shader effects for Unity's PostProcessing 2.0 package, so you need to have the PostProcessing 2.0 package installed and configured for your project.
 
-## Material Properties
+### Duo Shader effect
 
-- `Developed Colour` the colour of the lines when developed by the chemicals
-- `Undeveloped Colour` the colour of the lines before being developed
+This effect takes your source and emulates having drawn it on a DuoShade board. It has a number of parameter for configuring your output image.
+
+- `Frequency` the distance in pixels between diagonal lines
+- `Thickness` the thickness of the lines as a fraction of their distance
+- `Black` the luma level of the source image considered black
+- `Dark` the luma level of the source image exposing both lines
+- `Light` the luma level of the source image exposing one line
+- `Undeveloped Level` the difference between unpainted paper and an unexposed line
+- `Undeveloped Colour` the colour of undeveloped lines
+- `Developed Colour` the colour of developed lines
+
+### Print effect
+
+This effect emulates making a black and white print from your source image. It simply paints every pixel white or black depending on the black level.
+
+- `PrintBlackLevel` the luma level at the output stage considered black
 - `Ink Colour` colour of the ink at the output stage
 - `Paper Colour` colour of the paper at the output stage
-- `Undeveloped Level` the luma level of the source image which remains undeveloped
-- `Frequency` represents the approximate width of the diagonal lines in screen pixels
-- `Thickness` adjust the thickness of the duoshade lines in the range from 0 to 1 as a fraction of the `Frequency`
-- `Fringe` the thickness of the blended edge of the duoshade line as above for smoothing
-- `Black` the luma level considered black at the input stage
-- `Dark` the luma level required to expose both lines
-- `Light` the luma level required to expose one set of diagonal lines
-- `PrintBlackLevel` the luma level at the output stage considered black
-- `Noise` the level of noise introduced into the process (helps to reduce banding between light levels)
 
 ## Example Scene
 
-This component contains the shader, a material, and a script to apply it to the camera. To add this effect to your scene, assign the ScreenEffect script to your camera and choose the DuoShader material as the `screenEffect`.
+The example scene has a camera with PostProcessing effects applied. The example post-processing profile contains 3 effects applied in order.
 
-I have added the Toon shader components from the Unity Essentials pack to provide the outline and quantised colour.
+First is the DuoShader which takes your image and emulates drawing it onto DuoShade board.
 
-## Customisation
+Next is the Unity grain effect which helps to feather out lighter areas of the duo shade effect.
 
-If you already have your own script that applies a `Graphics.Blit` to the camera, you can substitute it for the script supplied here. And if you already have a `Material` assigned for use you can substitute that as well by simply selecting `ScreenEffect/DuoShader` as the shader for your material.
+The final step is the print effect.
+
+I have also added the Toon shader components from the Unity Essentials pack to provide the outline and quantised colour in the source image.
+
+And the last step is FXAA which helps to smooth out the diagonal lines in the duo shade effect.
