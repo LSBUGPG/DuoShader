@@ -10,7 +10,7 @@ public class Print : PostProcessEffectSettings
     [Range(0.0f, 1.0f), Tooltip("The input level cutoff between white and black")]
     public FloatParameter printBlackLevel = new FloatParameter
     {
-        value = 0.788f
+        value = 0.75f
     };
     public ColorParameter inkColour = new ColorParameter
     {

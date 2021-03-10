@@ -22,9 +22,24 @@ public class OutlineRenderer : PostProcessEffectRenderer<Outline>
 {
     public override void Render(PostProcessRenderContext context)
     {
-        var sheet = context.propertySheets.Get(Shader.Find("Hidden/Custom/Outline"));
+        var sheet = context.propertySheets.Get(
+            Shader.Find("Hidden/Custom/Outline"));
+
+        RenderTexture renderTexture = context.GetScreenSpaceTemporaryRT();
+        context.command.BlitFullscreenTriangle(
+            context.source,
+            renderTexture,
+            sheet,
+            0);
+
         sheet.properties.SetFloat("_Thickness", settings.thickness);
         sheet.properties.SetFloat("_Detect", settings.detect);
-        context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
+        context.command.BlitFullscreenTriangle(
+            renderTexture,
+            context.destination,
+            sheet,
+            1);
+
+        RenderTexture.ReleaseTemporary(renderTexture);
     }
 }

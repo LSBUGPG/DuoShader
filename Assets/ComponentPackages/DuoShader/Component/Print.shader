@@ -6,6 +6,8 @@
 
     float3 _InkColour;
     float3 _PaperColour;
+    float3 _InputColourCoefs;
+    float3 _OutputColourCoefs;
     float _PrintBlackLevel;
 
     float luma(float3 col)

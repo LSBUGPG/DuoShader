@@ -25,12 +25,12 @@ public class DuoShader : PostProcessEffectSettings
     [Range(0f, 1f), Tooltip("Luma level of the source image exposing both lines")]
     public FloatParameter dark = new FloatParameter
     {
-        value = 0.4f
+        value = 0.5f
     };
     [Range(0f, 1f), Tooltip("Luma level of the source image exposing one line")]
     public FloatParameter light = new FloatParameter
     {
-        value = 0.758f
+        value = 0.75f
     };
     [Tooltip("The output level difference between uncoloured and an undeveloped line")]
     public FloatParameter undevelopedLevel = new FloatParameter

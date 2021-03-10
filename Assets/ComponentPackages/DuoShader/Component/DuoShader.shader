@@ -52,13 +52,13 @@
         float2 uv = i.texcoord;
         float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
         float3 rgb = col.rgb;
-        float l = luma(rgb);
+        float l = col.a;
         float3 s = shade(l, uv);
         rgb = lerp(float3(1, 1, 1), lerp(_UndevelopedColour, _DevelopedColour, s), step(_UndevelopedLevel, s));
         float black = 1.0 - step(_Black, l);
         rgb *= (1.0 - black);
         col.rgb = rgb;
-        col.a = luma(rgb);
+        col.a = l;
         return col;
     }
 
