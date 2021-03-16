@@ -12,6 +12,11 @@ public class Print : PostProcessEffectSettings
     {
         value = 0.75f
     };
+    [Range(0.0f, 0.5f), Tooltip("Noise in the sampling process")]
+    public FloatParameter sampleNoise = new FloatParameter
+    {
+        value = 0.1f
+    };
     public ColorParameter inkColour = new ColorParameter
     {
         value = new Color(0.278f, 0.231f, 0.239f, 1.0f)
@@ -30,6 +35,7 @@ public class PrintRenderer : PostProcessEffectRenderer<Print>
         sheet.properties.SetFloat("_PrintBlackLevel", settings.printBlackLevel);
         sheet.properties.SetColor("_InkColour", settings.inkColour);
         sheet.properties.SetColor("_PaperColour", settings.paperColour);
+        sheet.properties.SetFloat("_NoiseLevel", settings.sampleNoise);
         context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
     }
 }

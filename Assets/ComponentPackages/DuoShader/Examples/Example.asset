@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5984b6876a7c1bc45b5bd478790ebdf8, type: 3}
   m_Name: DuoShader
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
@@ -57,39 +57,11 @@ MonoBehaviour:
     overrideState: 1
     value: 1
   thickness:
-    overrideState: 0
-    value: 1
+    overrideState: 1
+    value: 1.61
   detect:
     overrideState: 1
-    value: 0.7
---- !u!114 &-5647020471908703653
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
-  m_Name: Grain
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  colored:
-    overrideState: 0
-    value: 1
-  intensity:
-    overrideState: 1
-    value: 0.2
-  size:
-    overrideState: 0
-    value: 1
-  lumContrib:
-    overrideState: 0
-    value: 0.8
+    value: 0.253
 --- !u!114 &-3942599376374622670
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -120,7 +92,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
   - {fileID: -8797589486253002058}
-  - {fileID: -5647020471908703653}
   - {fileID: 8863594654239997919}
   - {fileID: -6576958522929028385}
 --- !u!114 &8863594654239997919
@@ -135,13 +106,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7230a38c95df444fa9b4e589348ffe1, type: 3}
   m_Name: Print
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
   printBlackLevel:
     overrideState: 0
     value: 0.7
+  sampleNoise:
+    overrideState: 1
+    value: 0.163
   inkColour:
     overrideState: 0
     value: {r: 0.278, g: 0.231, b: 0.239, a: 1}
