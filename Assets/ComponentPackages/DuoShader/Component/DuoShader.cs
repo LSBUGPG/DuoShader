@@ -47,6 +47,11 @@ public class DuoShader : PostProcessEffectSettings
     {
         value = new Color(0.839f, 0.914f, 0.961f, 1.0f)
     };
+    [Range(0.0f, 0.5f), Tooltip("Noise in the sampling process")]
+    public FloatParameter sampleNoise = new FloatParameter
+    {
+        value = 0.1f
+    };
 }
 
 public class DuoShadeRenderer : PostProcessEffectRenderer<DuoShader>
@@ -62,6 +67,7 @@ public class DuoShadeRenderer : PostProcessEffectRenderer<DuoShader>
         sheet.properties.SetFloat("_UndevelopedLevel", settings.undevelopedLevel);
         sheet.properties.SetColor("_UndevelopedColour", settings.undevelopedColour);
         sheet.properties.SetColor("_DevelopedColour", settings.developedColour);
+        sheet.properties.SetFloat("_NoiseLevel", settings.sampleNoise);
         context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
     }
 }

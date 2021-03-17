@@ -16,6 +16,10 @@ public class Outline : PostProcessEffectSettings
     {
         value = 0.5f
     };
+    public BoolParameter debug = new BoolParameter
+    {
+        value = false
+    };
 }
 
 public class OutlineRenderer : PostProcessEffectRenderer<Outline>
@@ -25,21 +29,33 @@ public class OutlineRenderer : PostProcessEffectRenderer<Outline>
         var sheet = context.propertySheets.Get(
             Shader.Find("Hidden/Custom/Outline"));
 
-        RenderTexture renderTexture = context.GetScreenSpaceTemporaryRT();
-        context.command.BlitFullscreenTriangle(
-            context.source,
-            renderTexture,
-            sheet,
-            0);
+        if (settings.debug)
+        {
+            context.command.BlitFullscreenTriangle(
+                context.source,
+                context.destination,
+                sheet,
+                0);
+        }
+        else
+        {
+            RenderTexture renderTexture = context.GetScreenSpaceTemporaryRT();
+            context.command.BlitFullscreenTriangle(
+                context.source,
+                renderTexture,
+                sheet,
+                0);
 
-        sheet.properties.SetFloat("_Thickness", settings.thickness);
-        sheet.properties.SetFloat("_Detect", settings.detect);
-        context.command.BlitFullscreenTriangle(
-            renderTexture,
-            context.destination,
-            sheet,
-            1);
+            sheet.properties.SetFloat("_Thickness", settings.thickness);
+            sheet.properties.SetFloat("_Detect", settings.detect);
+            sheet.properties.SetTexture("_ColourNormalsTex", renderTexture);
+            context.command.BlitFullscreenTriangle(
+                context.source,
+                context.destination,
+                sheet,
+                1);
 
-        RenderTexture.ReleaseTemporary(renderTexture);
+            RenderTexture.ReleaseTemporary(renderTexture);
+        }
     }
 }

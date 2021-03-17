@@ -12,6 +12,7 @@
     float _Black;
     float _Dark;
     float _Light;
+    float _NoiseLevel;
 
     float slice(float low, float high, float value)
     {
@@ -41,6 +42,13 @@
         return hatch;
     }
 
+    float noise(float2 uv)
+    {
+        // magic values copied from Unity Post Processing
+        float3 p = float3(12.9898f, 78.233f, 43758.5453f);
+        return frac(sin(dot(uv, p.xy)) * p.z);
+    }
+
     float luma(float3 col)
     {
         float3 coefs = float3(0.2126, 0.7152, 0.0722);
@@ -53,7 +61,7 @@
         float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
         float3 rgb = col.rgb;
         float l = luma(rgb);
-        float3 s = shade(l, uv);
+        float3 s = shade(l + noise(uv) * _NoiseLevel, uv);
         rgb = lerp(float3(1, 1, 1), lerp(_UndevelopedColour, _DevelopedColour, s), step(_UndevelopedLevel, s));
         float black = 1.0 - step(_Black, l);
         rgb *= (1.0 - black);

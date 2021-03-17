@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5984b6876a7c1bc45b5bd478790ebdf8, type: 3}
   m_Name: DuoShader
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
@@ -23,14 +23,14 @@ MonoBehaviour:
     overrideState: 0
     value: 0.4
   black:
-    overrideState: 0
-    value: 0.25
+    overrideState: 1
+    value: 0.1
   dark:
-    overrideState: 0
-    value: 0.5
+    overrideState: 1
+    value: 0.2
   light:
-    overrideState: 0
-    value: 0.75
+    overrideState: 1
+    value: 0.39
   undevelopedLevel:
     overrideState: 0
     value: 0.01
@@ -40,6 +40,9 @@ MonoBehaviour:
   undevelopedColour:
     overrideState: 0
     value: {r: 0.839, g: 0.914, b: 0.961, a: 1}
+  sampleNoise:
+    overrideState: 1
+    value: 0.072
 --- !u!114 &-6576958522929028385
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -62,6 +65,9 @@ MonoBehaviour:
   detect:
     overrideState: 1
     value: 0.253
+  debug:
+    overrideState: 0
+    value: 1
 --- !u!114 &-3942599376374622670
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -106,16 +112,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7230a38c95df444fa9b4e589348ffe1, type: 3}
   m_Name: Print
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
   printBlackLevel:
-    overrideState: 0
-    value: 0.7
+    overrideState: 1
+    value: 0.5
   sampleNoise:
     overrideState: 1
-    value: 0.163
+    value: 0.102
   inkColour:
     overrideState: 0
     value: {r: 0.278, g: 0.231, b: 0.239, a: 1}
