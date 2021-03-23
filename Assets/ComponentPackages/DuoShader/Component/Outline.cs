@@ -9,12 +9,12 @@ public class Outline : PostProcessEffectSettings
 {
     public FloatParameter thickness = new FloatParameter
     {
-        value = 1.0f
+        value = 1.5f
     };
     [Range(0.0f, 1.0f)]
     public FloatParameter detect = new FloatParameter
     {
-        value = 0.5f
+        value = 0.25f
     };
     public BoolParameter debug = new BoolParameter
     {

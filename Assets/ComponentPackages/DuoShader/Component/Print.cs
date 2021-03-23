@@ -10,7 +10,7 @@ public class Print : PostProcessEffectSettings
     [Range(0.0f, 1.0f), Tooltip("The input level cutoff between white and black")]
     public FloatParameter printBlackLevel = new FloatParameter
     {
-        value = 0.75f
+        value = 0.5f
     };
     [Range(0.0f, 0.5f), Tooltip("Noise in the sampling process")]
     public FloatParameter sampleNoise = new FloatParameter

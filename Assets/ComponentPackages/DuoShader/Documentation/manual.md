@@ -12,9 +12,9 @@ This effect was achieved by the artist before printing by using a special type o
 
 Here is [a video of the process in action](https://youtu.be/GftgBL-sHnI).
 
-## How to use this shader
+## How to use these shaders
 
-This package contains two PostProcess shader effects for Unity's PostProcessing 2.0 package, so you need to have the PostProcessing 2.0 package installed and configured for your project.
+This package contains three PostProcess shader effects for Unity's PostProcessing 2.0 package, so you need to have the PostProcessing 2.0 package installed and configured for your project. Each shader emulates a part of the authoring or printing process.
 
 ### Duo Shader effect
 
@@ -28,25 +28,35 @@ This effect takes your source and emulates having drawn it on a DuoShade board. 
 - `Undeveloped Level` the difference between unpainted paper and an unexposed line
 - `Undeveloped Colour` the colour of undeveloped lines
 - `Developed Colour` the colour of developed lines
+- `Sample Noise` this helps to feather the transition between luma levels
 
 ### Print effect
 
-This effect emulates making a black and white print from your source image. It simply paints every pixel white or black depending on the black level.
+This effect emulates making a black and white print from your source image. It paints every pixel as either the paper colour or the ink colour depending on the luma level of the source image.
 
-- `PrintBlackLevel` the luma level at the output stage considered black
-- `Ink Colour` colour of the ink at the output stage
-- `Paper Colour` colour of the paper at the output stage
+- `Print Black Level` the luma level at the output stage considered for ink
+- `Sample Noise` this helps to dither the transition between ink and paper
+- `Ink Colour` colour of the ink
+- `Paper Colour` colour of the paper
+
+### Outline effect
+
+This detects the edges of the source image. It does this first by colouring each face according to its normal, and then using an edge detection algorithm to mark the outline areas.
+
+- `Thickness` this is the thickness of the outline
+- `Detect` this is the detection sensitivity to a change in colour
+- `Debug` this flag is for debugging the output to make sure faces are coloured according to their normals
+
+This effect requires the depth normals camera texture so I have included a camera script to ensure that your camera is set to the correct mode.
 
 ## Example Scene
 
-The example scene has a camera with PostProcessing effects applied. The example post-processing profile contains 3 effects applied in order.
+The example scene has a camera with PostProcessing effects applied. The example post-processing profile contains the three effects applied in the following order.
 
-First is the DuoShader which takes your image and emulates drawing it onto DuoShade board.
+First, the outline effect is applied to draw an outline over the source image where is detects changes in the surface normal or colour.
 
-Next is the Unity grain effect which helps to feather out lighter areas of the duo shade effect.
+Then the DuoShader is applied to create the hatching pattern for dark and light shades.
 
-The final step is the print effect.
+Finally, the print effect is applied to colour the image as either ink or paper.
 
-I have also added the Toon shader components from the Unity Essentials pack to provide the outline and quantised colour in the source image.
-
-And the last step is FXAA which helps to smooth out the diagonal lines in the duo shade effect.
+FXAA has been applied to the post process layer to smooth out pixel edges, particularly around the noisy areas of the image.

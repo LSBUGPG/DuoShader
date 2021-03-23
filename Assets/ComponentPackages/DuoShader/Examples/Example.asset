@@ -23,14 +23,14 @@ MonoBehaviour:
     overrideState: 0
     value: 0.4
   black:
-    overrideState: 1
+    overrideState: 0
     value: 0.1
   dark:
-    overrideState: 1
+    overrideState: 0
     value: 0.2
   light:
-    overrideState: 1
-    value: 0.39
+    overrideState: 0
+    value: 0.4
   undevelopedLevel:
     overrideState: 0
     value: 0.01
@@ -41,8 +41,8 @@ MonoBehaviour:
     overrideState: 0
     value: {r: 0.839, g: 0.914, b: 0.961, a: 1}
   sampleNoise:
-    overrideState: 1
-    value: 0.072
+    overrideState: 0
+    value: 0.05
 --- !u!114 &-6576958522929028385
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -60,11 +60,11 @@ MonoBehaviour:
     overrideState: 1
     value: 1
   thickness:
-    overrideState: 1
-    value: 1.61
+    overrideState: 0
+    value: 1.5
   detect:
-    overrideState: 1
-    value: 0.253
+    overrideState: 0
+    value: 0.25
   debug:
     overrideState: 0
     value: 1
@@ -117,11 +117,11 @@ MonoBehaviour:
     overrideState: 1
     value: 1
   printBlackLevel:
-    overrideState: 1
+    overrideState: 0
     value: 0.5
   sampleNoise:
-    overrideState: 1
-    value: 0.102
+    overrideState: 0
+    value: 0.1
   inkColour:
     overrideState: 0
     value: {r: 0.278, g: 0.231, b: 0.239, a: 1}
